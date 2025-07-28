@@ -1,4 +1,4 @@
-io#!/bin/python3
+#!/bin/python3
 
 import picamera2, libcamera
 import PIL
