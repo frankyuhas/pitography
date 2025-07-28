@@ -338,7 +338,7 @@ def run(picam2, disp, preview_config, capture_config):
 
 		#get preview from camera
 		preview_array = picam2.capture_array()
-		preview = PIL.Image.fromarray(preview_array)
+		preview = PIL.Image.fromarray(preview_array).rotate(270, expand=True)
 		#preview.paste(ImageOps.colorize(rotated_overlay, (0,0,0), (255,255,255)), (0,0), rotated_overlay) #white
 		#preview.paste(ImageOps.colorize(rotated_overlay, (255,255,255), (0,0,0)), (0,0), rotated_overlay) #black
 		#preview.paste(ImageOps.colorize(rotated_overlay, (0,0,0), (204,135,42)), (0,0), rotated_overlay) #orange
@@ -375,9 +375,10 @@ def main():
 	picam2 = picamera2.Picamera2()
 	capture_config = picam2.create_still_configuration()
 	picam2.align_configuration(capture_config) #auto optimize config if applicable
-	preview_config = picam2.create_preview_configuration(main={"size":(LCD_1in44.LCD_WIDTH,LCD_1in44.LCD_HEIGHT)}, transform=libcamera.Transform(hflip=1, vflip=1))
+	preview_config = picam2.create_preview_configuration(main={"size":(LCD_1in44.LCD_WIDTH,LCD_1in44.LCD_HEIGHT)}, transform=libcamera.Transform(rotation=90))
 	picam2.align_configuration(preview_config)
 	picam2.configure(preview_config)
+	picam2.set_controls({"AfMode": libcamera.controls.AfModeEnum.Continuous})
 	picam2.start()
 
 	#print("Camera Controls:",picam2.camera_controls) #debug
